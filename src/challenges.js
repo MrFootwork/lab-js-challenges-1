@@ -142,17 +142,15 @@ function greatestProduct(matrix) {
 			const subProducts = subMatrix.reduce((products, _, j, rowArray) => {
 				if (j >= rowArray.length - 3 && isHorizontal) return products;
 
-				const product = isHorizontal
-					? [0, 1, 2, 3].reduce(
-							(product, offset) => (product *= matrix[i][j + offset]),
-							1
-					  )
-					: [0, 1, 2, 3].reduce(
-							(product, offset) => (product *= matrix[i + offset][j]),
-							1
-					  );
+				const singleProduct = [...Array(4)].reduce((product, _, offset) => {
+					const [rowOffset, columnOffset] = isHorizontal
+						? [0, offset]
+						: [offset, 0];
 
-				products.push(product);
+					return (product *= matrix[i + rowOffset][j + columnOffset]);
+				}, 1);
+
+				products.push(singleProduct);
 				return products;
 			}, []);
 
