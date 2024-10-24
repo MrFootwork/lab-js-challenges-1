@@ -130,39 +130,36 @@ const matrix = [
 ];
 
 function greatestProduct(matrix) {
-	const horizontalProducts = matrix.reduce((products, subMatrix) => {
-		const subProducts = subMatrix.reduce((products, _, i, subArray) => {
-			if (i >= subArray.length - 3) return products;
+	const horizontalProducts = getProducts('horizontal');
+	const verticalProducts = getProducts('vertical');
 
-			const product = [0, 1, 2, 3].reduce(
-				(product, j) => (product *= subArray[i + j]),
-				1
-			);
+	function getProducts(direction) {
+		const isHorizontal = direction === 'horizontal';
 
-			products.push(product);
+		return matrix.reduce((products, subMatrix, i) => {
+			if (i >= matrix.length - 3 && !isHorizontal) return products;
+
+			const subProducts = subMatrix.reduce((products, _, j, rowArray) => {
+				if (j >= rowArray.length - 3 && isHorizontal) return products;
+
+				const product = isHorizontal
+					? [0, 1, 2, 3].reduce(
+							(product, offset) => (product *= matrix[i][j + offset]),
+							1
+					  )
+					: [0, 1, 2, 3].reduce(
+							(product, offset) => (product *= matrix[i + offset][j]),
+							1
+					  );
+
+				products.push(product);
+				return products;
+			}, []);
+
+			products.push(...subProducts);
 			return products;
 		}, []);
-
-		products.push(...subProducts);
-		return products;
-	}, []);
-
-	const verticalProducts = matrix.reduce((products, subMatrix, i, array) => {
-		if (i >= array.length - 3) return products;
-
-		const subProducts = subMatrix.reduce((products, _, j) => {
-			const product = [0, 1, 2, 3].reduce(
-				(product, rowOffset) => (product *= array[i + rowOffset][j]),
-				1
-			);
-
-			products.push(product);
-			return products;
-		}, []);
-
-		products.push(...subProducts);
-		return products;
-	}, []);
+	}
 
 	return Math.max(...horizontalProducts, ...verticalProducts);
 }
