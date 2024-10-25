@@ -20,10 +20,15 @@ function howManyTimes(list, repeatedWord) {
 // Iteration 2 | Number Sequence
 function createSequence(n) {
 	if (!n) return [];
-	return Array(n + 1)
-		.fill()
-		.map((_, i) => i);
+	return Array.from({ length: n + 1 }, (_, i) => i);
+	// return [...Array(n + 1)].map((_, i) => i);
 }
+// function createSequence(n) {
+// 	if (!n) return [];
+// 	return Array(n + 1)
+// 		.fill()
+// 		.map((_, i) => i);
+// }
 
 // Iteration 3 | Multiply for Each
 const numbers = [1, 2, 5, 10, 13, 50];
